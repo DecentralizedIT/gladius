@@ -125,7 +125,7 @@ contract GLACrowdsale {
      * @param _beneficiary The address of the beneficiary
      * @param _baseRate The base rate (no bonus)
      * @param _rates The crowdsale rates
-     * @param _ratePeriods The periods that each phase lasts
+     * @param _ratePeriods The periods that each phase lasts (should start with the presale)
      * @param _rateBonusLockupPeriods The lockup period that each phase lasts
      * @param _stakeholders The addresses of the stakeholders
      * @param _stakeholderEthPercentages The eth percentages of the stakeholders (denominated by 4)
@@ -136,6 +136,7 @@ contract GLACrowdsale {
         beneficiary = _beneficiary;
         start = _start;
         crowdsaleEnd = start; // Plus the sum of the rate phases
+        presaleEnd = start + _ratePeriods[0];
 
         // Setup crowdsale rates and phases
         baseRate = _baseRate;

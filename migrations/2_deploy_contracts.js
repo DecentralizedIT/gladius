@@ -21,6 +21,38 @@ module.exports = function(deployer, network, accounts) {
   var rates;
   var baseRate = 500;
 
+  var phases = [{
+    period: 'Presale',
+    duration: 27 * time.days,
+    rate: 900,
+    lockupPeriod: 120 * time.days
+  }, {
+      period: 'First 24 hours',
+      duration: 1 * time.days,
+      rate: 750,
+      lockupPeriod: 110 * time.days
+  }, {
+      period: 'First week',
+      duration: 7 * time.days,
+      rate: 650,
+      lockupPeriod: 100 * time.days
+  }, {
+      period: 'Second week',
+      duration: 7 * time.days,
+      rate: 575,
+      lockupPeriod: 90 * time.days
+  }, {
+      period: 'Third week',
+      duration: 7 * time.days,
+      rate: 525,
+      lockupPeriod: 80 * time.days
+  }, {
+      period: 'Last week',
+      duration: 7 * time.days,
+      rate: 500,
+      lockupPeriod: 0 * time.days
+  }]
+
   return deployer.deploy(GLAToken).then(function(){
     tokenInstance = GLAToken.at(GLAToken.address);
     
@@ -47,38 +79,6 @@ module.exports = function(deployer, network, accounts) {
           eth: 0
         }
       ]
-
-      var phases = [{
-          period: 'Presale',
-          duration: 27 * time.days,
-          rate: 900,
-          lockupPeriod: 120 * time.days
-      }, {
-          period: 'First 24 hours',
-          duration: 1 * time.days,
-          rate: 750,
-          lockupPeriod: 110 * time.days
-      }, {
-          period: 'First week',
-          duration: 7 * time.days,
-          rate: 650,
-          lockupPeriod: 100 * time.days
-      }, {
-          period: 'Second week',
-          duration: 7 * time.days,
-          rate: 575,
-          lockupPeriod: 90 * time.days
-      }, {
-          period: 'Third week',
-          duration: 7 * time.days,
-          rate: 525,
-          lockupPeriod: 80 * time.days
-      }, {
-          period: 'Last week',
-          duration: 7 * time.days,
-          rate: 500,
-          lockupPeriod: 0 * time.days
-      }]
 
       // Use dummy beneficiary
       return deployer.deploy(GLACrowdsale, 
@@ -109,7 +109,7 @@ module.exports = function(deployer, network, accounts) {
   }).then(function(){
     crowdsaleInstance = GLACrowdsale.at(GLACrowdsale.address);
     if (network == "test" || network == "develop") {
-      return tokenInstance.transferOwnership(crowdsaleInstance.address);
+      return tokenInstance.transferOwnership(accounts[0]);
     } else {
       return tokenInstance.transferOwnership(crowdsaleInstance.address);
     }
