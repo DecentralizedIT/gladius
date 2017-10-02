@@ -34,7 +34,7 @@ module.exports = function(deployer, network, accounts) {
           tokens: 1500,
           eth: 0
         }, {
-          account: accounts[4], // DCORP
+          account: accounts[4], // TLG
           tokens: 750,
           eth: 1000
         }, {

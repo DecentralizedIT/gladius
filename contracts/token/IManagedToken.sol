@@ -7,7 +7,7 @@ contract IManagedToken is IToken {
     /** 
      * Returns true if the token is locked
      * 
-     * @return Wheter the token is locked
+     * @return Whether the token is locked
      */
     function isLocked() constant returns (bool);
 
@@ -21,7 +21,7 @@ contract IManagedToken is IToken {
 
 
     /**
-     * Unlocks the token so that the transfering of value is enabled 
+     * Unlocks the token so that the transferring of value is enabled 
      *
      * @return Whether the unlocking was successful or not
      */

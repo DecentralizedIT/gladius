@@ -125,7 +125,7 @@ contract GLACrowdsale {
      * @param _beneficiary The address of the beneficiary
      * @param _baseRate The base rate (no bonus)
      * @param _rates The crowdsale rates
-     * @param _ratePeriods The peroids that each phase lasts
+     * @param _ratePeriods The periods that each phase lasts
      * @param _rateBonusLockupPeriods The lockup period that each phase lasts
      * @param _stakeholders The addresses of the stakeholders
      * @param _stakeholderEthPercentages The eth percentages of the stakeholders (denominated by 4)
@@ -216,7 +216,7 @@ contract GLACrowdsale {
 
 
     /**
-     * Prove that beneficirary is able to sign transactions
+     * Prove that beneficiary is able to sign transactions
      *
      * @return The beneficiary address
      */
@@ -349,7 +349,7 @@ contract GLACrowdsale {
     /**
      * Failsafe mechanism
      * 
-     * Allowes beneficary to extract tokens from the contract
+     * Allows beneficary to extract tokens from the contract
      */
     function extractToken(address _tokenContract, uint _value) external only_beneficiary {
         IToken _tokenInstance = IToken(_tokenContract);

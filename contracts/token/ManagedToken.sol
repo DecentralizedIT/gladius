@@ -35,7 +35,7 @@ contract ManagedToken is IManagedToken, Owned, Token {
      * Construct 
      * 
      * @param _name The full token name
-     * @param _symbol The token symbol (abberation)
+     * @param _symbol The token symbol (aberration)
      * @param _locked Whether the token should be locked initially
      */
     function ManagedToken(string _name, string _symbol, bool _locked) Token(_name, _symbol) {
@@ -128,7 +128,7 @@ contract ManagedToken is IManagedToken, Owned, Token {
         balances[_to] += _value;
         totalTokenSupply += _value;
 
-        // Notify listners 
+        // Notify listeners 
         Transfer(0, this, _value);
         Transfer(this, _to, _value);
 
@@ -155,7 +155,7 @@ contract ManagedToken is IManagedToken, Owned, Token {
         balances[_from] -= _value;
         totalTokenSupply -= _value;
 
-        // Notify listners 
+        // Notify listeners 
         Transfer(_from, 0, _value);
 
         return true;

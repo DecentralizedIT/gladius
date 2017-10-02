@@ -38,7 +38,7 @@ contract Token is IToken, InputValidator {
      * Construct 
      * 
      * @param _name The full token name
-     * @param _symbol The token symbol (abberation)
+     * @param _symbol The token symbol (aberration)
      */
     function Token(string _name, string _symbol) {
         name = _name;
@@ -88,7 +88,7 @@ contract Token is IToken, InputValidator {
         balances[msg.sender] -= _value;
         balances[_to] += _value;
 
-        // Notify listners
+        // Notify listeners
         Transfer(msg.sender, _to, _value);
         return true;
     }
@@ -120,7 +120,7 @@ contract Token is IToken, InputValidator {
         // Update allowance
         allowed[_from][msg.sender] -= _value;
 
-        // Notify listners
+        // Notify listeners
         Transfer(_from, _to, _value);
         return true;
     }
@@ -138,7 +138,7 @@ contract Token is IToken, InputValidator {
         // Update allowance
         allowed[msg.sender][_spender] = _value;
 
-        // Notify listners
+        // Notify listeners
         Approval(msg.sender, _spender, _value);
         return true;
     }
