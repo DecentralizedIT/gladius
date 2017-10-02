@@ -100,7 +100,7 @@ contract Token is IToken, InputValidator {
      * @param _from The address of the sender
      * @param _to The address of the recipient
      * @param _value The amount of token to be transferred
-     * @return Whether the transfer was successful or not
+     * @return Whether the transfer was successful or not 
      */
     function transferFrom(address _from, address _to, uint _value) public safe_arguments(3) returns (bool) {
 

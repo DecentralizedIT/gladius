@@ -8,7 +8,7 @@ import "./token/IManagedToken.sol";
  * Gladius is the decentralized solution to protecting against DDoS attacks by allowing you to connect 
  * to protection pools near you to provide better protection and accelerate your content. With an easy 
  * to use interface as well as powerful insight tools, Gladius enables anyone to protect and accelerate 
- * their website. Visit https://gladius.io/
+ * their website. Visit https://gladius.io/ 
  *
  * #created 29/09/2017
  * #author Frank Bonnet

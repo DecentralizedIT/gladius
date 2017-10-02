@@ -43,7 +43,7 @@ contract IManagedToken is IToken {
      *
      * @param _from The address that owns the tokens to be burned
      * @param _value The amount of tokens to be burned
-     * @return Whether the tokens where sucessfully burned or not
+     * @return Whether the tokens where sucessfully burned or not 
      */
     function burn(address _from, uint _value) returns (bool);
 }

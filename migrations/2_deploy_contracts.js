@@ -26,7 +26,7 @@ module.exports = function(deployer, network, accounts) {
     
     if (network == "test" || network == "develop") {
       stakeholders = [{
-          account: accounts[0], // Beneficiary
+          account: accounts[0], // Beneficiary 
           tokens: 0,
           eth: 8000
         }, {
