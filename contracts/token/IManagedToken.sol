@@ -2,6 +2,17 @@ pragma solidity ^0.4.15;
 
 import "./IToken.sol";
 
+/**
+ * @title ManagedToken interface
+ *
+ * Adds the following functionallity to the basic ERC20 token
+ * - Locking
+ * - Issuing
+ * - Burning 
+ *
+ * #created 29/09/2017
+ * #author Frank Bonnet
+ */
 contract IManagedToken is IToken { 
 
     /** 

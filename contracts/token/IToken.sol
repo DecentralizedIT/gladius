@@ -1,5 +1,14 @@
 pragma solidity ^0.4.15;
 
+/**
+ * @title ERC20 compatible token interface
+ *
+ * Implements ERC 20 Token standard: https://github.com/ethereum/EIPs/issues/20
+ * - Short address attack fix
+ *
+ * #created 29/09/2017
+ * #author Frank Bonnet
+ */
 contract IToken { 
 
     /** 

@@ -4,10 +4,10 @@ import "./IToken.sol";
 import "../modifier/InputValidator.sol";
 
 /**
- * @title Abstract ERC20 compatable token
+ * @title ERC20 compatible token
  *
- * Implements ERC 20 Token standard: https://github.com/ethereum/EIPs/issues/20 with the addition 
- * of ownership, a lock and issuing.
+ * Implements ERC 20 Token standard: https://github.com/ethereum/EIPs/issues/20
+ * - Short address attack fix
  *
  * #created 29/09/2017
  * #author Frank Bonnet
