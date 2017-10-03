@@ -12,8 +12,8 @@
     "url": "https://github.com/DecentralizedIT/gladius"
   },
   "dependencies": {
-    "truffle": "^3.4.9",
-    "web3": "^1.0.0-beta.18"
+    "truffle": "^3.4.11",
+    "web3": "^1.0.0-beta.22"
   },
   "devDependencies": {
     "ethereumjs-testrpc": "~4.1.1",

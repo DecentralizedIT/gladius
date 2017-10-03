@@ -75,7 +75,7 @@ contract ManagedToken is IManagedToken, Owned, Token {
      * @param _value The amount of tokens to be approved for transfer
      * @return Whether the approval was successful or not
      */
-    function approve(address _spender, uint _value) public only_when_unlocked returns (bool) {
+    function approve(address _spender, uint _value) public returns (bool) {
         return super.approve(_spender, _value);
     }
 
