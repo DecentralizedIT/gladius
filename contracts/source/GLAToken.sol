@@ -2,6 +2,7 @@ pragma solidity ^0.4.15;
 
 import "./token/IToken.sol";
 import "./token/ManagedToken.sol";
+import "../infrastructure/ITokenRetreiver.sol";
 
 /**
  * @title GLA (Gladius) token
@@ -9,7 +10,7 @@ import "./token/ManagedToken.sol";
  * #created 26/09/2017
  * #author Frank Bonnet
  */
-contract GLAToken is ManagedToken {
+contract GLAToken is ManagedToken, ITokenRetreiver {
 
 
     /**
@@ -22,11 +23,16 @@ contract GLAToken is ManagedToken {
     /**
      * Failsafe mechanism
      * 
-     * Allowes owner to extract tokens from the contract
+     * Allows owner to retreive tokens from the contract
+     *
+     * @param _tokenContract The address of ERC20 compatible token
      */
-    function extractToken(address _tokenContract, uint _value) public only_owner {
-        IToken _tokenInstance = IToken(_tokenContract);
-        _tokenInstance.transfer(owner, _value);
+    function retreiveTokens(address _tokenContract) public only_owner {
+        IToken tokenInstance = IToken(_tokenContract);
+        uint tokenBalance = tokenInstance.balanceOf(this);
+        if (tokenBalance > 0) {
+            tokenInstance.transfer(owner, tokenBalance);
+        }
     }
 
 

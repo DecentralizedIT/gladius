@@ -14,7 +14,6 @@ contract ITokenRetreiver {
      * Extracts tokens from the contract
      *
      * @param _tokenContract The address of ERC20 compatible token
-     * @param _amount The amount of tokens to extract
      */
-    function retreiveTokens(address _tokenContract, uint _amount);
+    function retreiveTokens(address _tokenContract);
 }

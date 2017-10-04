@@ -42,11 +42,18 @@ contract GLACrowdsale is Crowdsale, ITokenRetreiver {
      * Allows beneficary to retreive tokens from the contract
      *
      * @param _tokenContract The address of ERC20 compatible token
-     * @param _amount The amount of tokens to extract
      */
-    function retreiveTokens(address _tokenContract, uint _amount) public only_beneficiary {
-        IToken _tokenInstance = IToken(_tokenContract);
-        _tokenInstance.transfer(beneficiary, _amount);
+    function retreiveTokens(address _tokenContract) public only_beneficiary {
+        IToken tokenInstance = IToken(_tokenContract);
+
+        // Retreive tokens from our token contract
+        ITokenRetreiver(token).retreiveTokens(_tokenContract);
+
+        // Retreive tokens from crowdsale contract
+        uint tokenBalance = tokenInstance.balanceOf(this);
+        if (tokenBalance > 0) {
+            tokenInstance.transfer(owner, tokenBalance);
+        }
     }
 
 
