@@ -11,6 +11,7 @@ pragma solidity ^0.4.15;
  */
 contract ICrowdsale {
 
+
     /**
      * Allows the implementing contract to validate a 
      * contributing account
@@ -89,7 +90,7 @@ contract ICrowdsale {
     /**
      * Receive Eth and issue tokens to the sender
      */
-    function contribute() payable;
+    function () payable;
 
 
     /**

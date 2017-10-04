@@ -457,7 +457,7 @@ contract Crowdsale is ICrowdsale, Owned {
     /**
      * Receive Eth and issue tokens to the sender
      */
-    function contribute() payable at_stage(Stages.InProgress) {
+    function () payable at_stage(Stages.InProgress) {
         uint received = msg.value;
         address sender = msg.sender;
 
@@ -520,14 +520,6 @@ contract Crowdsale is ICrowdsale, Owned {
         if (amountToRefund > 0 && !sender.send(amountToRefund)) {
             revert();
         }
-    }
-
-
-    /**
-     * Receive Eth and issue tokens to the sender
-     */
-    function () payable {
-        contribute();
     }
 
 

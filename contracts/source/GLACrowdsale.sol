@@ -3,6 +3,7 @@ pragma solidity ^0.4.15;
 import "./crowdsale/Crowdsale.sol";
 import "../infrastructure/ITokenRetreiver.sol";
 import "../infrastructure/authentication/whitelist/IWhitelist.sol";
+import "../integration/wings/IWingsAdapter.sol";
 
 /**
  * @title GLACrowdsale
@@ -15,7 +16,7 @@ import "../infrastructure/authentication/whitelist/IWhitelist.sol";
  * #created 29/09/2017
  * #author Frank Bonnet
  */
-contract GLACrowdsale is Crowdsale, ITokenRetreiver {
+contract GLACrowdsale is Crowdsale, ITokenRetreiver, IWingsAdapter {
 
     /**
      * Whitelist used for authentication
@@ -42,6 +43,19 @@ contract GLACrowdsale is Crowdsale, ITokenRetreiver {
     function GLACrowdsale(uint _start, address _token, address _whitelist, uint _tokenDenominator, uint _percentageDenominator, uint _minAmount, uint _maxAmount, uint _minAcceptedAmount, uint _minAmountPresale, uint _maxAmountPresale, uint _minAcceptedAmountPresale, uint _stakeholdersCooldownPeriod) 
         Crowdsale(_start, _token, _tokenDenominator, _percentageDenominator, _minAmount, _maxAmount, _minAcceptedAmount, _minAmountPresale, _maxAmountPresale, _minAcceptedAmountPresale, _stakeholdersCooldownPeriod) {
         whitelist = IWhitelist(_whitelist);
+    }
+
+
+    /**
+     * Wings integration - Get the total raised amount of Ether
+     *
+     * Can only increased, means if you withdraw ETH from the wallet, should be not modified (you can use two fields 
+     * to keep one with a total accumulated amount) amount of ETH in contract and totalCollected for total amount of ETH collected
+     *
+     * @return Total raised Ether amount
+     */
+    function totalCollected() public constant returns (uint) {
+        return raised;
     }
 
 
