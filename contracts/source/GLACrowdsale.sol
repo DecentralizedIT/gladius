@@ -27,9 +27,9 @@ contract GLACrowdsale is Crowdsale, ITokenRetreiver, IWingsAdapter {
     /**
      * Setup the crowdsale
      *
+     * @param _whitelist The address of the whitelist authenticator
      * @param _start The timestamp of the start date
      * @param _token The token that is sold
-     * @param _whitelist The address of the whitelist authenticator
      * @param _tokenDenominator The token amount of decimals that the token uses
      * @param _percentageDenominator The percision of percentages
      * @param _minAmount The min cap for the ICO
@@ -40,7 +40,7 @@ contract GLACrowdsale is Crowdsale, ITokenRetreiver, IWingsAdapter {
      * @param _minAcceptedAmountPresale The lowest accepted amount during the presale phase
      * @param _stakeholdersCooldownPeriod The period after which stakeholder tokens are released
      */
-    function GLACrowdsale(uint _start, address _token, address _whitelist, uint _tokenDenominator, uint _percentageDenominator, uint _minAmount, uint _maxAmount, uint _minAcceptedAmount, uint _minAmountPresale, uint _maxAmountPresale, uint _minAcceptedAmountPresale, uint _stakeholdersCooldownPeriod) 
+    function GLACrowdsale(address _whitelist, uint _start, address _token, uint _tokenDenominator, uint _percentageDenominator, uint _minAmount, uint _maxAmount, uint _minAcceptedAmount, uint _minAmountPresale, uint _maxAmountPresale, uint _minAcceptedAmountPresale, uint _stakeholdersCooldownPeriod) 
         Crowdsale(_start, _token, _tokenDenominator, _percentageDenominator, _minAmount, _maxAmount, _minAcceptedAmount, _minAmountPresale, _maxAmountPresale, _minAcceptedAmountPresale, _stakeholdersCooldownPeriod) {
         whitelist = IWhitelist(_whitelist);
     }
@@ -66,7 +66,7 @@ contract GLACrowdsale is Crowdsale, ITokenRetreiver, IWingsAdapter {
      * @param _contributor Address that is being validated
      * @return Wheter the contributor is accepted or not
      */
-    function isAcceptedContributor(address _contributor) public returns (bool) {
+    function isAcceptedContributor(address _contributor) internal returns (bool) {
         return whitelist.authenticate(_contributor);
     }
 

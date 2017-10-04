@@ -136,6 +136,16 @@ contract Crowdsale is ICrowdsale, Owned {
 
 
     /**
+     * Allows the implementing contract to validate a 
+     * contributing account
+     *
+     * @param _contributor Address that is being validated
+     * @return Wheter the contributor is accepted or not
+     */
+    function isAcceptedContributor(address _contributor) internal returns (bool);
+
+
+    /**
      * Setup the crowdsale
      *
      * @param _start The timestamp of the start date
@@ -311,40 +321,96 @@ contract Crowdsale is ICrowdsale, Owned {
 
 
     /**
-     * Returns the current rate and bonus release date
+     * Returns the current phase based on the current time
      *
-     * @param _volume The amount wei used to determin what volume multiplier to use
-     * @return (rate, releaseDate)
+     * @return The index of the current phase
      */
-    function getCurrentRate(uint _volume) public constant returns (uint, uint) {
-        uint rate = 0;
-        uint bonusReleaseDate = 0;
-        if (stage == Stages.InProgress && now >= start) {
-
-            // Find phase
-            for (uint i = 0; i < phases.length; i++) {
-                Phase storage phase = phases[i];
-                if (now <= phase.end) {
-                    rate = phase.rate;
-                    bonusReleaseDate = phase.bonusReleaseDate;
-                    break;
-                }
+    function getCurrentPhase() internal constant returns (bool found, uint phase) {
+        for (uint i = 0; i < phases.length; i++) {
+            if (now <= phases[i].end) {
+                phase = i;
+                break;
             }
+        }
+
+        return (found, phase);
+    }
+
+
+    /**
+     * Returns the rate and bonus release date
+     *
+     * @param _phase The phase to use while determining the rate
+     * @param _volume The amount wei used to determin what volume multiplier to use
+     * @return The rate used in `_phase` multiplied by the corresponding volume multiplier
+     */
+    function getRate(uint _phase, uint _volume) public constant returns (uint) {
+        uint rate = 0;
+        if (stage == Stages.InProgress && now >= start) {
+            Phase storage phase = phases[_phase];
+            rate = phase.rate;
 
             // Find volume multiplier
             if (phase.useVolumeMultiplier && volumeMultiplierThresholds.length > 0 && _volume >= volumeMultiplierThresholds[0]) {
-                for (uint ii = volumeMultiplierThresholds.length - 1; ii >= 0; ii--) {
-                    if (_volume >= volumeMultiplierThresholds[ii]) {
-                        VolumeMultiplier storage multiplier = volumeMultipliers[volumeMultiplierThresholds[ii]];
+                for (uint i = volumeMultiplierThresholds.length; i > 0; i--) {
+                    if (_volume >= volumeMultiplierThresholds[i - 1]) {
+                        VolumeMultiplier storage multiplier = volumeMultipliers[volumeMultiplierThresholds[i - 1]];
                         rate += phase.rate * multiplier.rateMultiplier / percentageDenominator;
-                        bonusReleaseDate += (phase.bonusReleaseDate - crowdsaleEnd) * multiplier.bonusReleaseDateMultiplier / percentageDenominator;
                         break;
                     }
                 }
             }
         }
         
-        return (rate, bonusReleaseDate);
+        return rate;
+    }
+
+
+    /**
+     * Get distribution data based on the current phase and 
+     * the volume in wei that is being distributed
+     * 
+     * @param _phase The current crowdsale phase
+     * @param _volume The amount wei used to determine what volume multiplier to use
+     * @return Volumes and corresponding release dates
+     */
+    function getDistributionData(uint _phase, uint _volume) internal constant returns (uint[], uint[]) {
+        Phase storage phase = phases[_phase];
+        uint remainingVolume = _volume;
+
+        bool usingMultiplier = false;
+        uint[] memory volumes = new uint[](1);
+        uint[] memory releaseDates = new uint[](1);
+
+        // Find volume multipliers
+        if (phase.useVolumeMultiplier && volumeMultiplierThresholds.length > 0 && _volume >= volumeMultiplierThresholds[0]) {
+            uint phaseReleasePeriod = phase.bonusReleaseDate - crowdsaleEnd;
+            for (uint i = volumeMultiplierThresholds.length; i > 0; i--) {
+                if (_volume >= volumeMultiplierThresholds[i - 1]) {
+                    if (!usingMultiplier) {
+                        volumes = new uint[](i + 1);
+                        releaseDates = new uint[](i + 1);
+                        usingMultiplier = true;
+                    }
+
+                    VolumeMultiplier storage multiplier = volumeMultipliers[volumeMultiplierThresholds[i - 1]];
+                    uint releaseDate = phase.bonusReleaseDate + phaseReleasePeriod * multiplier.bonusReleaseDateMultiplier / percentageDenominator;
+                    uint volume = remainingVolume - volumeMultiplierThresholds[i - 1];
+
+                    // Store increment
+                    volumes[i] = volume;
+                    releaseDates[i] = releaseDate;
+
+                    remainingVolume -= volume;
+                }
+            }
+        }
+
+        // Store increment
+        volumes[0] = remainingVolume;
+        releaseDates[0] = phase.bonusReleaseDate;
+
+        return (volumes, releaseDates);
     }
 
 
@@ -499,20 +565,26 @@ contract Crowdsale is ICrowdsale, Owned {
         }
 
         // Distribute tokens
-        var (rate, bonusReleaseDate) = getCurrentRate(acceptedAmount);
-        uint tokensAtCurrentRate = toTokens(acceptedAmount, rate);
+        uint tokensToIssue = 0;
+        var (, phase) = getCurrentPhase();
+        var rate = getRate(phase, acceptedAmount);
+        var (volumes, releaseDates) = getDistributionData(phase, acceptedAmount);
+        
+        // Allocate tokens
+        for (uint i = 0; i < volumes.length; i++) {
+            var tokensAtCurrentRate = toTokens(volumes[i], rate);
+            if (rate > baseRate && releaseDates[i] > now) {
+                uint bonusTokens = tokensAtCurrentRate / rate * (rate - baseRate);
+                _allocateTokens(sender, bonusTokens, releaseDates[i]);
 
-        uint tokensToIssue;
-        if (bonusReleaseDate > now) {
-            tokensToIssue = toTokens(acceptedAmount, baseRate);
-            if (tokensAtCurrentRate > tokensToIssue) {
-                _allocateTokens(sender, tokensAtCurrentRate - tokensToIssue, bonusReleaseDate);
+                tokensToIssue += tokensAtCurrentRate - bonusTokens;
+            } else {
+                tokensToIssue += tokensAtCurrentRate;
             }
-        } else {
-            tokensToIssue = tokensAtCurrentRate;
         }
 
-        if (!token.issue(sender, tokensToIssue)) {
+        // Issue tokens
+        if (tokensToIssue > 0 && !token.issue(sender, tokensToIssue)) {
             revert();
         }
 
@@ -521,16 +593,6 @@ contract Crowdsale is ICrowdsale, Owned {
             revert();
         }
     }
-
-
-    /**
-     * Allows the implementing contract to validate a 
-     * contributing account
-     *
-     * @param _contributor Address that is being validated
-     * @return Wheter the contributor is accepted or not
-     */
-    function isAcceptedContributor(address _contributor) returns (bool);
 
 
     /**

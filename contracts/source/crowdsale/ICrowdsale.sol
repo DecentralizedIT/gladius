@@ -13,16 +13,6 @@ contract ICrowdsale {
 
 
     /**
-     * Allows the implementing contract to validate a 
-     * contributing account
-     *
-     * @param _contributor Address that is being validated
-     * @return Wheter the contributor is accepted or not
-     */
-    function isAcceptedContributor(address _contributor) returns (bool);
-
-
-    /**
      * Returns true if the contract is currently in the presale phase
      *
      * @return True if in presale phase
@@ -68,12 +58,13 @@ contract ICrowdsale {
 
 
     /**
-     * Returns the current rate and bonus release date
+     * Returns the rate and bonus release date
      *
+     * @param _phase The phase to use while determining the rate
      * @param _volume The amount wei used to determin what volume multiplier to use
-     * @return (rate, releaseDate)
+     * @return The rate used in `_phase` multiplied by the corresponding volume multiplier
      */
-    function getCurrentRate(uint _volume) constant returns (uint, uint);
+    function getRate(uint _phase, uint _volume) constant returns (uint);
 
 
     /**
@@ -85,12 +76,6 @@ contract ICrowdsale {
      * @return Amount in tokens
      */
     function toTokens(uint _wei, uint _rate) constant returns (uint);
-
-
-    /**
-     * Receive Eth and issue tokens to the sender
-     */
-    function () payable;
 
 
     /**
@@ -111,4 +96,10 @@ contract ICrowdsale {
      * not raised before end of the crowdsale
      */
     function refund();
+
+
+    /**
+     * Receive Eth and issue tokens to the sender
+     */
+    function () payable;
 }

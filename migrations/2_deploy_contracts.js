@@ -7,11 +7,13 @@ var web3 = require('web3')
 var time = require('../test/lib/time.js')
 
 // Contracts
+var Whitelist = artifacts.require("Whitelist")
 var TokenContract = artifacts.require("GLAToken")
 var CrowdsaleContract = artifacts.require("GLACrowdsale")
 
 module.exports = function(deployer, network, accounts) {
 
+  var whitelistInstance
   var tokenInstance
   var crowdsaleInstance
   var stakeholders
@@ -31,7 +33,7 @@ module.exports = function(deployer, network, accounts) {
   
   var phases = [{
     period: 'Presale',
-    duration: 27 * time.days,
+    duration: 16 * time.days,
     rate: 500,
     lockupPeriod: 30 * time.days,
     usesVolumeMultiplier: true
@@ -90,7 +92,7 @@ module.exports = function(deployer, network, accounts) {
   }]
 
   if (network == "test" || network == "develop" || network == "development") {
-    start = new Date("October 4, 2017 12:00:00 GMT+0000").getUnixTime()
+    start = new Date("October 15, 2017 12:00:00 GMT+0000").getUnixTime()
     stakeholders = [{
         account: accounts[0], // Beneficiary 
         tokens: 0,
@@ -114,7 +116,7 @@ module.exports = function(deployer, network, accounts) {
       }
     ]
   } else if(network == "ropsten") {
-    start = new Date("October 4, 2017 12:00:00 GMT+0000").getUnixTime()
+    start = new Date("October 15, 2017 12:00:00 GMT+0000").getUnixTime()
     stakeholders = [{
         account: accounts[0], // Beneficiary 
         tokens: 0,
@@ -138,7 +140,7 @@ module.exports = function(deployer, network, accounts) {
       }
     ]
   } else if(network == "main") {
-    start = new Date("October 4, 2017 12:00:00 GMT+0000").getUnixTime()
+    start = new Date("October 15, 2017 12:00:00 GMT+0000").getUnixTime()
     stakeholders = [{
         account: accounts[0], // Beneficiary 
         tokens: 0,
@@ -165,11 +167,19 @@ module.exports = function(deployer, network, accounts) {
 
   return deployer.deploy(TokenContract).then(function(){
     tokenInstance = TokenContract.at(TokenContract.address)
+    return deployer.deploy(Whitelist)
+  })
+  .then(function () {
+    return Whitelist.deployed()
+  })
+  .then(function (_instance) {
+    whitelistInstance = _instance
     return tokenInstance.decimals.call()
   })
   .then(function(_decimals){
     var tokenDenominator = Math.pow(10, _decimals.toNumber())
     return deployer.deploy(CrowdsaleContract, 
+      whitelistInstance.address,
       start,
       tokenInstance.address,
       tokenDenominator,
