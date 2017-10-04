@@ -1,7 +1,8 @@
 pragma solidity ^0.4.15;
 
-import "../../infrastructure/modifier/Owned.sol";
+import "./ICrowdsale.sol";
 import "../token/IManagedToken.sol";
+import "../../infrastructure/modifier/Owned.sol";
 
 /**
  * @title Crowdsale
@@ -12,7 +13,7 @@ import "../token/IManagedToken.sol";
  * #created 29/09/2017
  * #author Frank Bonnet
  */
-contract Crowdsale is Owned {
+contract Crowdsale is ICrowdsale, Owned {
 
     enum Stages {
         Deploying,
@@ -60,8 +61,8 @@ contract Crowdsale is Owned {
     address public confirmedBy; // Address that proved beneficiary signing capability 
 
     // Denominators
-    uint public percentageDenominator;
-    uint public tokenDenominator;
+    uint internal percentageDenominator;
+    uint internal tokenDenominator;
 
     // Crowdsale state
     uint public start;
@@ -272,7 +273,7 @@ contract Crowdsale is Owned {
      * @param _owner The address from which the allocated token balance will be retrieved
      * @return The allocated token balance
      */
-    function balanceOf(address _owner) external constant returns (uint) {
+    function balanceOf(address _owner) public constant returns (uint) {
         uint sum = 0;
         for (uint i = 0; i < allocatedIndex[_owner].length; i++) {
             sum += allocated[_owner][allocatedIndex[_owner][i]].tokens;
@@ -288,7 +289,7 @@ contract Crowdsale is Owned {
      * @param _owner The address from which the allocated eth balance will be retrieved
      * @return The allocated eth balance
      */
-    function ethBalanceOf(address _owner) external constant returns (uint) {
+    function ethBalanceOf(address _owner) public constant returns (uint) {
         uint sum = 0;
         for (uint i = 0; i < allocatedIndex[_owner].length; i++) {
             sum += allocated[_owner][allocatedIndex[_owner][i]].eth;
@@ -304,7 +305,7 @@ contract Crowdsale is Owned {
      * @param _owner The address from which the refundable balance will be retrieved
      * @return The invested refundable balance
      */
-    function refundableEthBalanceOf(address _owner) external constant returns (uint) {
+    function refundableEthBalanceOf(address _owner) public constant returns (uint) {
         return now > crowdsaleEnd && raised < minAmount ? 0 : balances[_owner];
     }
 
@@ -446,19 +447,27 @@ contract Crowdsale is Owned {
 
 
     /**
+     * Failsafe and clean-up mechanism
+     */
+    function destroy() public only_beneficiary only_after(180 days) {
+        selfdestruct(beneficiary);
+    }
+
+
+    /**
      * Receive Eth and issue tokens to the sender
      */
-    function () payable at_stage(Stages.InProgress) {
+    function contribute() payable at_stage(Stages.InProgress) {
+        uint received = msg.value;
+        address sender = msg.sender;
 
         // During the crowdsale
         require(now >= start);
         require(now <= crowdsaleEnd);
-
-        uint received = msg.value;
-        address sender = msg.sender;
-        bool presalePhase = isInPresalePhase();
+        require(isAcceptedContributor(sender));
 
         // When in presale phase
+        bool presalePhase = isInPresalePhase();
         require(!presalePhase || received >= minAcceptedAmountPresale);
         require(!presalePhase || raised < maxAmountPresale);
 
@@ -512,6 +521,24 @@ contract Crowdsale is Owned {
             revert();
         }
     }
+
+
+    /**
+     * Receive Eth and issue tokens to the sender
+     */
+    function () payable {
+        contribute();
+    }
+
+
+    /**
+     * Allows the implementing contract to validate a 
+     * contributing account
+     *
+     * @param _contributor Address that is being validated
+     * @return Wheter the contributor is accepted or not
+     */
+    function isAcceptedContributor(address _contributor) returns (bool);
 
 
     /**
@@ -582,10 +609,4 @@ contract Crowdsale is Owned {
             }
         }
     }
-
-
-    /**
-     * Failsafe and clean-up mechanism
-     */
-    function destroy();
 }
