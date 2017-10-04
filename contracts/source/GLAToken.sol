@@ -1,7 +1,7 @@
 pragma solidity ^0.4.15;
 
-import "./IToken.sol";
-import "./ManagedToken.sol";
+import "./token/IToken.sol";
+import "./token/ManagedToken.sol";
 
 /**
  * @title GLA (Gladius) token

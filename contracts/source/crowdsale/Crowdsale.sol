@@ -1,20 +1,18 @@
 pragma solidity ^0.4.15;
 
-import "./modifier/Owned.sol";
-import "./token/IManagedToken.sol";
+import "../../infrastructure/modifier/Owned.sol";
+import "../token/IManagedToken.sol";
 
 /**
- * @title GLACrowdsale
+ * @title Crowdsale
  *
- * Gladius is the decentralized solution to protecting against DDoS attacks by allowing you to connect 
- * to protection pools near you to provide better protection and accelerate your content. With an easy 
- * to use interface as well as powerful insight tools, Gladius enables anyone to protect and accelerate 
- * their website. Visit https://gladius.io/ 
+ * Abstract base crowdsale contract that manages the sale of 
+ * an ERC20 token
  *
  * #created 29/09/2017
  * #author Frank Bonnet
  */
-contract GLACrowdsale is Owned {
+contract Crowdsale is Owned {
 
     enum Stages {
         Deploying,
@@ -151,7 +149,7 @@ contract GLACrowdsale is Owned {
      * @param _minAcceptedAmountPresale The lowest accepted amount during the presale phase
      * @param _stakeholdersCooldownPeriod The period after which stakeholder tokens are released
      */
-    function GLACrowdsale(uint _start, address _token, uint _tokenDenominator, uint _percentageDenominator, uint _minAmount, uint _maxAmount, uint _minAcceptedAmount, uint _minAmountPresale, uint _maxAmountPresale, uint _minAcceptedAmountPresale, uint _stakeholdersCooldownPeriod) {
+    function Crowdsale(uint _start, address _token, uint _tokenDenominator, uint _percentageDenominator, uint _minAmount, uint _maxAmount, uint _minAcceptedAmount, uint _minAmountPresale, uint _maxAmountPresale, uint _minAcceptedAmountPresale, uint _stakeholdersCooldownPeriod) {
         token = IManagedToken(_token);
         tokenDenominator = _tokenDenominator;
         percentageDenominator = _percentageDenominator;
@@ -433,7 +431,7 @@ contract GLACrowdsale is Owned {
     /**
      * Refund in the case of an unsuccessful crowdsale. The 
      * crowdsale is considered unsuccessful if minAmount was 
-     * not raised before end
+     * not raised before end of the crowdsale
      */
     function refund() public only_after_crowdsale at_stage(Stages.InProgress) {
         require(raised < minAmount);
@@ -444,28 +442,6 @@ contract GLACrowdsale is Owned {
         if (receivedAmount > 0 && !msg.sender.send(receivedAmount)) {
             balances[msg.sender] = receivedAmount;
         }
-    }
-
-
-    /**
-     * Failsafe mechanism
-     * 
-     * Allows beneficary to extract tokens from the contract
-     *
-     * @param _tokenContract The address of ERC20 compatible token
-     * @param _amount The amount of tokens to extract
-     */
-    function extractToken(address _tokenContract, uint _amount) public only_beneficiary {
-        IToken _tokenInstance = IToken(_tokenContract);
-        _tokenInstance.transfer(beneficiary, _amount);
-    }
-
-
-    /**
-     * Failsafe and clean-up mechanism
-     */
-    function destroy() public only_beneficiary only_after(180 days) {
-        selfdestruct(beneficiary);
     }
 
 
@@ -488,6 +464,7 @@ contract GLACrowdsale is Owned {
 
         // When in ico phase
         require(presalePhase || received >= minAcceptedAmount);
+        require(presalePhase || raised >= minAmountPresale);
         require(presalePhase || raised < maxAmount);
 
         uint amountToRefund;
@@ -605,4 +582,10 @@ contract GLACrowdsale is Owned {
             }
         }
     }
+
+
+    /**
+     * Failsafe and clean-up mechanism
+     */
+    function destroy();
 }

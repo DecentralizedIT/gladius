@@ -6,10 +6,6 @@ Date.prototype.getUnixTime = function() {
 var web3 = require('web3')
 var time = require('../test/lib/time.js')
 
-// Permissions
-var ModifierOwned = artifacts.require("modifier/Owned")
-var ModifierInputValidator = artifacts.require("modifier/InputValidator")
-
 // Contracts
 var TokenContract = artifacts.require("GLAToken")
 var CrowdsaleContract = artifacts.require("GLACrowdsale")

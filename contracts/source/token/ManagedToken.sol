@@ -2,7 +2,7 @@ pragma solidity ^0.4.15;
 
 import "./Token.sol";
 import "./IManagedToken.sol";
-import "../modifier/Owned.sol";
+import "../../infrastructure/ownership/TransferableOwnership.sol";
 
 /**
  * @title ManagedToken
@@ -15,7 +15,7 @@ import "../modifier/Owned.sol";
  * #created 29/09/2017
  * #author Frank Bonnet
  */
-contract ManagedToken is IManagedToken, Owned, Token {
+contract ManagedToken is IManagedToken, Token, TransferableOwnership {
 
     // Token state
     bool internal locked;

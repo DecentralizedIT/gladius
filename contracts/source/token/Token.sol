@@ -1,7 +1,7 @@
 pragma solidity ^0.4.15;
 
 import "./IToken.sol";
-import "../modifier/InputValidator.sol";
+import "../../infrastructure/modifier/InputValidator.sol";
 
 /**
  * @title ERC20 compatible token
