@@ -7,7 +7,7 @@ contract IOwnership {
      *
      * @param _account The address to test against
      */
-    function isOwner(address _account) returns (bool);
+    function isOwner(address _account) returns constant (bool);
 
 
     /**
@@ -15,5 +15,5 @@ contract IOwnership {
      *
      * @return address The current owner
      */
-    function getOwner() returns (address);
+    function getOwner() returns constant (address);
 }

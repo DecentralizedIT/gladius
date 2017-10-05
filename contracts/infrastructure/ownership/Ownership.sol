@@ -11,7 +11,7 @@ contract Ownership is IOwnership, Owned {
      *
      * @param _account The address to test against
      */
-    function isOwner(address _account) public returns (bool) {
+    function isOwner(address _account) public constant returns (bool) {
         return _account == owner;
     }
 
@@ -21,7 +21,7 @@ contract Ownership is IOwnership, Owned {
      *
      * @return address The current owner
      */
-    function getOwner() public returns (address) {
+    function getOwner() public constant returns (address) {
         return owner;
     }
 }
