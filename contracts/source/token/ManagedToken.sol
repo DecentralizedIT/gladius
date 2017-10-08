@@ -91,17 +91,6 @@ contract ManagedToken is IManagedToken, Token, TransferableOwnership {
 
 
     /**
-     * Locks the token so that the transfering of value is enabled 
-     *
-     * @return Whether the locking was successful or not
-     */
-    function lock() public only_owner returns (bool)  {
-        locked = true;
-        return locked;
-    }
-
-
-    /**
      * Unlocks the token so that the transfering of value is enabled 
      *
      * @return Whether the unlocking was successful or not
@@ -131,32 +120,6 @@ contract ManagedToken is IManagedToken, Token, TransferableOwnership {
         // Notify listeners 
         Transfer(0, this, _value);
         Transfer(this, _to, _value);
-
-        return true;
-    }
-
-
-    /**
-     * Burns `_value` tokens of `_recipient`
-     *
-     * @param _from The address that owns the tokens to be burned
-     * @param _value The amount of tokens to be burned
-     * @return Whether the tokens where sucessfully burned or not
-     */
-    function burn(address _from, uint _value) public only_owner safe_arguments(2) returns (bool) {
-
-        // Check if the token owner has enough tokens
-        require(balances[_from] >= _value);
-
-        // Check for overflows
-        require(balances[_from] - _value < balances[_from]);
-
-        // Burn tokens
-        balances[_from] -= _value;
-        totalTokenSupply -= _value;
-
-        // Notify listeners 
-        Transfer(_from, 0, _value);
 
         return true;
     }

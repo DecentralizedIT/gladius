@@ -220,6 +220,6 @@ module.exports = function(deployer, network, accounts) {
     return crowdsaleInstance.deploy()
   })
   .then(function(){
-    return tokenInstance.transferOwnership(crowdsaleInstance.address)
+    return tokenInstance.transferOwnership(accounts[0])
   })
 }

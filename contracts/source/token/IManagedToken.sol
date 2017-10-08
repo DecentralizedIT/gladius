@@ -24,14 +24,6 @@ contract IManagedToken is IToken {
 
 
     /**
-     * Locks the token so that the transfering of value is disabled 
-     *
-     * @return Whether the unlocking was successful or not
-     */
-    function lock() returns (bool);
-
-
-    /**
      * Unlocks the token so that the transferring of value is enabled 
      *
      * @return Whether the unlocking was successful or not
@@ -47,14 +39,4 @@ contract IManagedToken is IToken {
      * @return Whether the tokens where sucessfully issued or not
      */
     function issue(address _to, uint _value) returns (bool);
-
-
-    /**
-     * Burns `_value` tokens of `_from`
-     *
-     * @param _from The address that owns the tokens to be burned
-     * @param _value The amount of tokens to be burned
-     * @return Whether the tokens where sucessfully burned or not 
-     */
-    function burn(address _from, uint _value) returns (bool);
 }
