@@ -38,10 +38,9 @@ contract GLACrowdsale is Crowdsale, ITokenRetreiver, IWingsAdapter {
      * @param _minAmountPresale The min cap for the presale
      * @param _maxAmountPresale The max cap for the presale
      * @param _minAcceptedAmountPresale The lowest accepted amount during the presale phase
-     * @param _stakeholdersCooldownPeriod The period after which stakeholder tokens are released
      */
-    function GLACrowdsale(address _whitelist, uint _start, address _token, uint _tokenDenominator, uint _percentageDenominator, uint _minAmount, uint _maxAmount, uint _minAcceptedAmount, uint _minAmountPresale, uint _maxAmountPresale, uint _minAcceptedAmountPresale, uint _stakeholdersCooldownPeriod) 
-        Crowdsale(_start, _token, _tokenDenominator, _percentageDenominator, _minAmount, _maxAmount, _minAcceptedAmount, _minAmountPresale, _maxAmountPresale, _minAcceptedAmountPresale, _stakeholdersCooldownPeriod) {
+    function GLACrowdsale(address _whitelist, uint _start, address _token, uint _tokenDenominator, uint _percentageDenominator, uint _minAmount, uint _maxAmount, uint _minAcceptedAmount, uint _minAmountPresale, uint _maxAmountPresale, uint _minAcceptedAmountPresale) 
+        Crowdsale(_start, _token, _tokenDenominator, _percentageDenominator, _minAmount, _maxAmount, _minAcceptedAmount, _minAmountPresale, _maxAmountPresale, _minAcceptedAmountPresale) {
         whitelist = IWhitelist(_whitelist);
     }
 

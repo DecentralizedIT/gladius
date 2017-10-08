@@ -8,7 +8,6 @@ import "./IToken.sol";
  * Adds the following functionallity to the basic ERC20 token
  * - Locking
  * - Issuing
- * - Burning 
  *
  * #created 29/09/2017
  * #author Frank Bonnet

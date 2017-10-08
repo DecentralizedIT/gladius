@@ -29,7 +29,6 @@ module.exports = function(deployer, network, accounts) {
   var minAmountPresale = web3.utils.toWei(6896, 'ether')
   var maxAmountPresale = web3.utils.toWei(43103, 'ether')
   var minAcceptedAmountPresale = web3.utils.toWei(34, 'ether')
-  var stakeholdersCooldownPeriod = 360 * time.days
   
   var phases = [{
     period: 'Presale',
@@ -89,6 +88,23 @@ module.exports = function(deployer, network, accounts) {
     rate: 8000,
     lockupPeriod: 20000,
     threshold: web3.utils.toWei(1724, 'ether')
+  }]
+
+  var stakeholderTokenReleasePhases = [{
+    percentage: 2000,
+    vestingPeriod: 30 * time.days
+  }, {
+    percentage: 2000,
+    vestingPeriod: 60 * time.days
+  }, {
+    percentage: 2000,
+    vestingPeriod: 90 * time.days
+  }, {
+    percentage: 2000,
+    vestingPeriod: 120 * time.days
+  }, {
+    percentage: 2000,
+    vestingPeriod: 150 * time.days
   }]
 
   if (network == "test" || network == "develop" || network == "development") {
@@ -189,8 +205,7 @@ module.exports = function(deployer, network, accounts) {
       minAcceptedAmount,
       minAmountPresale,
       maxAmountPresale,
-      minAcceptedAmountPresale,
-      stakeholdersCooldownPeriod)
+      minAcceptedAmountPresale)
   })
   .then(function () {
     return CrowdsaleContract.deployed()
@@ -208,7 +223,9 @@ module.exports = function(deployer, network, accounts) {
     return crowdsaleInstance.setupStakeholders(
       Array.from(stakeholders, val => val.account), 
       Array.from(stakeholders, val => val.eth), 
-      Array.from(stakeholders, val => val.tokens))
+      Array.from(stakeholders, val => val.tokens),
+      Array.from(stakeholderTokenReleasePhases, val => val.percentage),
+      Array.from(stakeholderTokenReleasePhases, val => val.vestingPeriod))
   })
   .then(function(){
     return crowdsaleInstance.setupVolumeMultipliers(
@@ -220,6 +237,6 @@ module.exports = function(deployer, network, accounts) {
     return crowdsaleInstance.deploy()
   })
   .then(function(){
-    return tokenInstance.transferOwnership(accounts[0])
+    return tokenInstance.transferOwnership(crowdsaleInstance.address)
   })
 }

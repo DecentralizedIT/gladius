@@ -34,6 +34,11 @@ contract Crowdsale is ICrowdsale, Owned {
         uint index;
     }
 
+    struct Payout {
+        uint percentage;
+        uint vestingPeriod;
+    }
+
     struct Phase {
         uint rate;
         uint end;
@@ -54,7 +59,6 @@ contract Crowdsale is ICrowdsale, Owned {
     uint public minAmountPresale; 
     uint public maxAmountPresale;
     uint public minAcceptedAmountPresale;
-    uint public stakeholdersCooldownPeriod;
 
     // Company address
     address public beneficiary; 
@@ -86,6 +90,7 @@ contract Crowdsale is ICrowdsale, Owned {
     // Stakeholders
     mapping (address => Percentage) private stakeholderPercentages;
     address[] private stakeholderPercentagesIndex;
+    Payout[] private stakeholdersPayouts;
 
     // Crowdsale phases
     Phase[] private phases;
@@ -158,9 +163,8 @@ contract Crowdsale is ICrowdsale, Owned {
      * @param _minAmountPresale The min cap for the presale
      * @param _maxAmountPresale The max cap for the presale
      * @param _minAcceptedAmountPresale The lowest accepted amount during the presale phase
-     * @param _stakeholdersCooldownPeriod The period after which stakeholder tokens are released
      */
-    function Crowdsale(uint _start, address _token, uint _tokenDenominator, uint _percentageDenominator, uint _minAmount, uint _maxAmount, uint _minAcceptedAmount, uint _minAmountPresale, uint _maxAmountPresale, uint _minAcceptedAmountPresale, uint _stakeholdersCooldownPeriod) {
+    function Crowdsale(uint _start, address _token, uint _tokenDenominator, uint _percentageDenominator, uint _minAmount, uint _maxAmount, uint _minAcceptedAmount, uint _minAmountPresale, uint _maxAmountPresale, uint _minAcceptedAmountPresale) {
         token = IManagedToken(_token);
         tokenDenominator = _tokenDenominator;
         percentageDenominator = _percentageDenominator;
@@ -171,7 +175,6 @@ contract Crowdsale is ICrowdsale, Owned {
         minAmountPresale = _minAmountPresale;
         maxAmountPresale = _maxAmountPresale;
         minAcceptedAmountPresale = _minAcceptedAmountPresale;
-        stakeholdersCooldownPeriod = _stakeholdersCooldownPeriod;
     }
 
 
@@ -208,12 +211,19 @@ contract Crowdsale is ICrowdsale, Owned {
      * @param _stakeholders The addresses of the stakeholders (first stakeholder is the beneficiary)
      * @param _stakeholderEthPercentages The eth percentages of the stakeholders
      * @param _stakeholderTokenPercentages The token percentages of the stakeholders
+     * @param _stakeholderTokenPayoutPercentages The percentage of the tokens that is released at the respective date
+     * @param _stakeholderTokenPayoutVestingPeriods The vesting period after which the respective percentage of the tokens is released
      */
-    function setupStakeholders(address[] _stakeholders, uint[] _stakeholderEthPercentages, uint[] _stakeholderTokenPercentages) public only_owner at_stage(Stages.Deploying) {
+    function setupStakeholders(address[] _stakeholders, uint[] _stakeholderEthPercentages, uint[] _stakeholderTokenPercentages, uint[] _stakeholderTokenPayoutPercentages, uint[] _stakeholderTokenPayoutVestingPeriods) public only_owner at_stage(Stages.Deploying) {
         beneficiary = _stakeholders[0]; // First stakeholder is expected to be the beneficiary
         for (uint i = 0; i < _stakeholders.length; i++) {
             stakeholderPercentages[_stakeholders[i]] = Percentage(
                 _stakeholderEthPercentages[i], _stakeholderTokenPercentages[i], stakeholderPercentagesIndex.push(_stakeholders[i]) - 1);
+        }
+
+        // Percentages add up to 100
+        for (uint ii = 0; ii < _stakeholderTokenPayoutPercentages.length; ii++) {
+            stakeholdersPayouts.push(Payout(_stakeholderTokenPayoutPercentages[ii], _stakeholderTokenPayoutVestingPeriods[ii]));
         }
     }
 
@@ -442,7 +452,11 @@ contract Crowdsale is ICrowdsale, Owned {
         }
 
         // Allocate tokens (no allocation can be done after this period)
-        _allocateStakeholdersTokens(token.totalSupply() + allocatedTokens, crowdsaleEnd + stakeholdersCooldownPeriod);
+        uint totalTokenSupply = token.totalSupply() + allocatedTokens;
+        for (uint i = 0; i < stakeholdersPayouts.length; i++) {
+            Payout storage p = stakeholdersPayouts[i];
+            _allocateStakeholdersTokens(totalTokenSupply * p.percentage / percentageDenominator, now + p.vestingPeriod);
+        }
 
         // Allocate remaining ETH
         _allocateStakeholdersEth(this.balance - allocatedEth, 0);
@@ -588,7 +602,7 @@ contract Crowdsale is ICrowdsale, Owned {
 
         // Distribute tokens
         uint tokensToIssue = 0;
-        var (, phase) = getCurrentPhase();
+        var (,phase) = getCurrentPhase();
         var rate = getRate(phase, acceptedAmount);
         var (volumes, releaseDates) = getDistributionData(phase, acceptedAmount);
         
