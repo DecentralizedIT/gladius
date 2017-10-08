@@ -523,37 +523,61 @@ contract Crowdsale is ICrowdsale, Owned {
     /**
      * Receive Eth and issue tokens to the sender
      */
-    function () payable at_stage(Stages.InProgress) {
-        uint received = msg.value;
-        address sender = msg.sender;
+    function contribute() public payable {
+        _handleTransaction(msg.sender, msg.value);
+    }
+
+
+    /**
+     * Receive Eth and issue tokens to the sender
+     * 
+     * This function requires that msg.sender is not a contract. This is required because it's 
+     * not possible for a contract to specify a gas amount when calling the (internal) send() 
+     * function. Solidity imposes a maximum amount of gas (2300 gas at the time of writing)
+     * 
+     * Contracts can call the contribute() function instead
+     */
+    function () payable {
+        require(msg.sender == tx.origin);
+        _handleTransaction(msg.sender, msg.value);
+    }
+
+
+    /**
+     * Handle incoming transactions
+     * 
+     * @param _sender Transaction sender
+     * @param _received 
+     */
+    function _handleTransaction(address _sender, uint _received) private at_stage(Stages.InProgress) {
 
         // During the crowdsale
         require(now >= start);
         require(now <= crowdsaleEnd);
-        require(isAcceptedContributor(sender));
+        require(isAcceptedContributor(_sender));
 
         // When in presale phase
         bool presalePhase = isInPresalePhase();
-        require(!presalePhase || received >= minAcceptedAmountPresale);
+        require(!presalePhase || _received >= minAcceptedAmountPresale);
         require(!presalePhase || raised < maxAmountPresale);
 
         // When in ico phase
-        require(presalePhase || received >= minAcceptedAmount);
+        require(presalePhase || _received >= minAcceptedAmount);
         require(presalePhase || raised >= minAmountPresale);
         require(presalePhase || raised < maxAmount);
 
         uint amountToRefund;
         uint acceptedAmount;
 
-        if (presalePhase && raised + received > maxAmountPresale) {
+        if (presalePhase && raised + _received > maxAmountPresale) {
             acceptedAmount = maxAmountPresale - raised;
-        } else if (raised + received > maxAmount) {
+        } else if (raised + _received > maxAmount) {
             acceptedAmount = maxAmount - raised;
         } else {
-            acceptedAmount = received;
+            acceptedAmount = _received;
         }
 
-        amountToRefund = received - acceptedAmount;
+        amountToRefund = _received - acceptedAmount;
         raised += acceptedAmount;
         
         if (presalePhase) {
@@ -561,7 +585,7 @@ contract Crowdsale is ICrowdsale, Owned {
             _allocateStakeholdersEth(acceptedAmount, 0); 
         } else {
             // During the ICO phase - 100% refundable
-            balances[sender] += acceptedAmount; 
+            balances[_sender] += acceptedAmount; 
         }
 
         // Distribute tokens
@@ -575,7 +599,7 @@ contract Crowdsale is ICrowdsale, Owned {
             var tokensAtCurrentRate = toTokens(volumes[i], rate);
             if (rate > baseRate && releaseDates[i] > now) {
                 uint bonusTokens = tokensAtCurrentRate / rate * (rate - baseRate);
-                _allocateTokens(sender, bonusTokens, releaseDates[i]);
+                _allocateTokens(_sender, bonusTokens, releaseDates[i]);
 
                 tokensToIssue += tokensAtCurrentRate - bonusTokens;
             } else {
@@ -584,12 +608,12 @@ contract Crowdsale is ICrowdsale, Owned {
         }
 
         // Issue tokens
-        if (tokensToIssue > 0 && !token.issue(sender, tokensToIssue)) {
+        if (tokensToIssue > 0 && !token.issue(_sender, tokensToIssue)) {
             revert();
         }
 
         // Refund due to max cap hit
-        if (amountToRefund > 0 && !sender.send(amountToRefund)) {
+        if (amountToRefund > 0 && !_sender.send(amountToRefund)) {
             revert();
         }
     }
