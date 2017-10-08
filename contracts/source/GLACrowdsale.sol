@@ -87,7 +87,7 @@ contract GLACrowdsale is Crowdsale, ITokenRetreiver, IWingsAdapter {
         // Retreive tokens from crowdsale contract
         uint tokenBalance = tokenInstance.balanceOf(this);
         if (tokenBalance > 0) {
-            tokenInstance.transfer(owner, tokenBalance);
+            tokenInstance.transfer(beneficiary, tokenBalance);
         }
     }
 }
