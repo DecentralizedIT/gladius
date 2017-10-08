@@ -551,9 +551,10 @@ contract Crowdsale is ICrowdsale, Owned {
      */
     function _handleTransaction(address _sender, uint _received) private at_stage(Stages.InProgress) {
 
-        // During the crowdsale
-        require(now >= start);
-        require(now <= crowdsaleEnd);
+        // Crowdsale is active
+        require(now >= start && now <= crowdsaleEnd);
+
+        // Whitelist check
         require(isAcceptedContributor(_sender));
 
         // When in presale phase
@@ -566,9 +567,7 @@ contract Crowdsale is ICrowdsale, Owned {
         require(presalePhase || raised >= minAmountPresale);
         require(presalePhase || raised < maxAmount);
 
-        uint amountToRefund;
         uint acceptedAmount;
-
         if (presalePhase && raised + _received > maxAmountPresale) {
             acceptedAmount = maxAmountPresale - raised;
         } else if (raised + _received > maxAmount) {
@@ -577,7 +576,6 @@ contract Crowdsale is ICrowdsale, Owned {
             acceptedAmount = _received;
         }
 
-        amountToRefund = _received - acceptedAmount;
         raised += acceptedAmount;
         
         if (presalePhase) {
@@ -613,7 +611,7 @@ contract Crowdsale is ICrowdsale, Owned {
         }
 
         // Refund due to max cap hit
-        if (amountToRefund > 0 && !_sender.send(amountToRefund)) {
+        if (_received - acceptedAmount > 0 && !_sender.send(_received - acceptedAmount)) {
             revert();
         }
     }
