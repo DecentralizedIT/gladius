@@ -341,7 +341,8 @@ contract Crowdsale is ICrowdsale, Owned {
      *
      * @return The index of the current phase
      */
-    function getCurrentPhase() internal constant returns (bool found, uint phase) {
+    function getCurrentPhase() public constant returns (uint) {
+        uint phase;
         for (uint i = 0; i < phases.length; i++) {
             if (now <= phases[i].end) {
                 phase = i;
@@ -349,7 +350,7 @@ contract Crowdsale is ICrowdsale, Owned {
             }
         }
 
-        return (found, phase);
+        return phase;
     }
 
 
@@ -608,7 +609,7 @@ contract Crowdsale is ICrowdsale, Owned {
 
         // Distribute tokens
         uint tokensToIssue = 0;
-        var (,phase) = getCurrentPhase();
+        uint phase = getCurrentPhase();
         var rate = getRate(phase, acceptedAmount);
         var (volumes, releaseDates) = getDistributionData(phase, acceptedAmount);
         
