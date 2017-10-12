@@ -64,7 +64,6 @@ contract Crowdsale is ICrowdsale, Owned {
 
     // Company address
     address public beneficiary; 
-    address public confirmedBy; // Address that proved beneficiary signing capability 
 
     // Denominators
     uint internal percentageDenominator;
@@ -269,7 +268,6 @@ contract Crowdsale is ICrowdsale, Owned {
      */
     function confirmBeneficiary() public only_beneficiary at_stage(Stages.Deployed) {
         stage = Stages.InProgress;
-        confirmedBy = msg.sender;
     }
 
 
