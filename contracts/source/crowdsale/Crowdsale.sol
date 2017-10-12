@@ -31,8 +31,8 @@ contract Crowdsale is ICrowdsale, Owned {
     struct Percentage {
         uint eth;
         uint tokens;
-        bool overwriteVestingPeriod;
-        uint fixedVestingPeriod;
+        bool overwriteReleaseDate;
+        uint fixedReleaseDate;
         uint index; 
     }
 
@@ -212,20 +212,20 @@ contract Crowdsale is ICrowdsale, Owned {
      * @param _stakeholders The addresses of the stakeholders (first stakeholder is the beneficiary)
      * @param _stakeholderEthPercentages The eth percentages of the stakeholders
      * @param _stakeholderTokenPercentages The token percentages of the stakeholders
-     * @param _stakeholderTokenPayoutOverwriteVestingPeriod Wheter the vesting period is overwritten for the respective stakeholder
-     * @param _stakeholderTokenPayoutFixedVestingPeriod The vesting period after which the whole percentage of the tokens is released to the respective stakeholder
+     * @param _stakeholderTokenPayoutOverwriteReleaseDates Wheter the vesting period is overwritten for the respective stakeholder
+     * @param _stakeholderTokenPayoutFixedReleaseDates The vesting period after which the whole percentage of the tokens is released to the respective stakeholder
      * @param _stakeholderTokenPayoutPercentages The percentage of the tokens that is released at the respective date
      * @param _stakeholderTokenPayoutVestingPeriods The vesting period after which the respective percentage of the tokens is released
      */
-    function setupStakeholders(address[] _stakeholders, uint[] _stakeholderEthPercentages, uint[] _stakeholderTokenPercentages, bool[] _stakeholderTokenPayoutOverwriteVestingPeriod, uint[] _stakeholderTokenPayoutFixedVestingPeriod, uint[] _stakeholderTokenPayoutPercentages, uint[] _stakeholderTokenPayoutVestingPeriods) public only_owner at_stage(Stages.Deploying) {
+    function setupStakeholders(address[] _stakeholders, uint[] _stakeholderEthPercentages, uint[] _stakeholderTokenPercentages, bool[] _stakeholderTokenPayoutOverwriteReleaseDates, uint[] _stakeholderTokenPayoutFixedReleaseDates, uint[] _stakeholderTokenPayoutPercentages, uint[] _stakeholderTokenPayoutVestingPeriods) public only_owner at_stage(Stages.Deploying) {
         beneficiary = _stakeholders[0]; // First stakeholder is expected to be the beneficiary
         for (uint i = 0; i < _stakeholders.length; i++) {
             stakeholderPercentagesIndex.push(_stakeholders[i]);
             stakeholderPercentages[_stakeholders[i]] = Percentage(
                 _stakeholderEthPercentages[i], 
                 _stakeholderTokenPercentages[i], 
-                _stakeholderTokenPayoutOverwriteVestingPeriod[i],
-                _stakeholderTokenPayoutFixedVestingPeriod[i], i);
+                _stakeholderTokenPayoutOverwriteReleaseDates[i],
+                _stakeholderTokenPayoutFixedReleaseDates[i], i);
         }
 
         // Percentages add up to 100
@@ -341,7 +341,7 @@ contract Crowdsale is ICrowdsale, Owned {
      *
      * @return The index of the current phase
      */
-    function getCurrentPhase() public constant returns (uint) {
+    function getCurrentPhase() public constant returns (uint found) {
         for (uint i = 0; i < phases.length; i++) {
             if (now <= phases[i].end) {
                 return i;
@@ -704,7 +704,7 @@ contract Crowdsale is ICrowdsale, Owned {
                 _allocateTokens(
                     stakeholderPercentagesIndex[i], 
                     _amount * p.tokens / percentageDenominator, 
-                    p.overwriteVestingPeriod ? p.fixedVestingPeriod : _releaseDate);
+                    p.overwriteReleaseDate ? p.fixedReleaseDate : _releaseDate);
             }
         }
     }

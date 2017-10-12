@@ -113,38 +113,38 @@ module.exports = function(deployer, network, accounts) {
       account: accounts[0], // Beneficiary 
       tokens: 0,
       eth: 8000,
-      overwriteVestingPeriod: false,
-      fixedVestingPeriod: 0
+      overwriteReleaseDate: false,
+      fixedReleaseDate: 0
     }, {
       account: accounts[3], // Core founders
       tokens: 1000,
       eth: 0,
-      overwriteVestingPeriod: true,
-      fixedVestingPeriod: 78 * time.weeks // 18 months
+      overwriteReleaseDate: true,
+      fixedReleaseDate: new Date("April 15, 2019 12:00:00 GMT+0000").getUnixTime()
     }, {
       account: accounts[4], // TLG
       tokens: 750,
       eth: 1000,
-      overwriteVestingPeriod: false,
-      fixedVestingPeriod: 0
+      overwriteReleaseDate: false,
+      fixedReleaseDate: 0
     }, {
       account: accounts[5], // Inbound
       tokens: 750,
       eth: 1000,
-      overwriteVestingPeriod: false,
-      fixedVestingPeriod: 0
+      overwriteReleaseDate: false,
+      fixedReleaseDate: 0
     }, {
       account: accounts[6], // Bounty
       tokens: 1300,
       eth: 0,
-      overwriteVestingPeriod: false,
-      fixedVestingPeriod: 0
+      overwriteReleaseDate: false,
+      fixedReleaseDate: 0
     }, {
       account: accounts[1], // Wings.ai community
       tokens: 200,
       eth: 0,
-      overwriteVestingPeriod: true,
-      fixedVestingPeriod: 0
+      overwriteReleaseDate: true,
+      fixedReleaseDate: 0
     }]
   } else if(network == "ropsten") {
     start = new Date("October 15, 2017 12:00:00 GMT+0000").getUnixTime()
@@ -152,38 +152,38 @@ module.exports = function(deployer, network, accounts) {
       account: accounts[0], // Beneficiary 
       tokens: 0,
       eth: 8000,
-      overwriteVestingPeriod: false,
-      fixedVestingPeriod: 0
+      overwriteReleaseDate: false,
+      fixedReleaseDate: 0
     }, {
       account: accounts[3], // Core founders
       tokens: 1000,
       eth: 0,
-      overwriteVestingPeriod: true,
-      fixedVestingPeriod: 78 * time.weeks // 18 months
+      overwriteReleaseDate: true,
+      fixedReleaseDate: new Date("April 15, 2019 12:00:00 GMT+0000").getUnixTime()
     }, {
       account: accounts[4], // TLG
       tokens: 750,
       eth: 1000,
-      overwriteVestingPeriod: false,
-      fixedVestingPeriod: 0
+      overwriteReleaseDate: false,
+      fixedReleaseDate: 0
     }, {
       account: accounts[5], // Inbound
       tokens: 750,
       eth: 1000,
-      overwriteVestingPeriod: false,
-      fixedVestingPeriod: 0
+      overwriteReleaseDate: false,
+      fixedReleaseDate: 0
     }, {
       account: accounts[6], // Bounty
       tokens: 1300,
       eth: 0,
-      overwriteVestingPeriod: false,
-      fixedVestingPeriod: 0
+      overwriteReleaseDate: false,
+      fixedReleaseDate: 0
     }, {
-      account: accounts[9], // Wings.ai community
+      account: accounts[1], // Wings.ai community
       tokens: 200,
       eth: 0,
-      overwriteVestingPeriod: true,
-      fixedVestingPeriod: 0
+      overwriteReleaseDate: true,
+      fixedReleaseDate: 0
     }]
   } else if(network == "main") {
     start = new Date("October 15, 2017 12:00:00 GMT+0000").getUnixTime()
@@ -191,38 +191,38 @@ module.exports = function(deployer, network, accounts) {
       account: accounts[0], // Beneficiary 
       tokens: 0,
       eth: 8000,
-      overwriteVestingPeriod: false,
-      fixedVestingPeriod: 0
+      overwriteReleaseDate: false,
+      fixedReleaseDate: 0
     }, {
       account: accounts[3], // Core founders
       tokens: 1000,
       eth: 0,
-      overwriteVestingPeriod: true,
-      fixedVestingPeriod: 78 * time.weeks // 18 months
+      overwriteReleaseDate: true,
+      fixedReleaseDate: new Date("April 15, 2019 12:00:00 GMT+0000").getUnixTime()
     }, {
       account: accounts[4], // TLG
       tokens: 750,
       eth: 1000,
-      overwriteVestingPeriod: false,
-      fixedVestingPeriod: 0
+      overwriteReleaseDate: false,
+      fixedReleaseDate: 0
     }, {
       account: accounts[5], // Inbound
       tokens: 750,
       eth: 1000,
-      overwriteVestingPeriod: false,
-      fixedVestingPeriod: 0
+      overwriteReleaseDate: false,
+      fixedReleaseDate: 0
     }, {
       account: accounts[6], // Bounty
       tokens: 1300,
       eth: 0,
-      overwriteVestingPeriod: false,
-      fixedVestingPeriod: 0
+      overwriteReleaseDate: false,
+      fixedReleaseDate: 0
     }, {
-      account: accounts[9], // Wings.ai community
+      account: accounts[1], // Wings.ai community
       tokens: 200,
       eth: 0,
-      overwriteVestingPeriod: true,
-      fixedVestingPeriod: 0
+      overwriteReleaseDate: true,
+      fixedReleaseDate: 0
     }]
   }
 
@@ -269,8 +269,8 @@ module.exports = function(deployer, network, accounts) {
       Array.from(stakeholders, val => val.account), 
       Array.from(stakeholders, val => val.eth), 
       Array.from(stakeholders, val => val.tokens),
-      Array.from(stakeholders, val => val.overwriteVestingPeriod),
-      Array.from(stakeholders, val => val.fixedVestingPeriod),
+      Array.from(stakeholders, val => val.overwriteReleaseDate),
+      Array.from(stakeholders, val => val.fixedReleaseDate),
       Array.from(stakeholderTokenReleasePhases, val => val.percentage),
       Array.from(stakeholderTokenReleasePhases, val => val.vestingPeriod))
   })
