@@ -332,7 +332,7 @@ contract Crowdsale is ICrowdsale, Owned {
      * @return The invested refundable balance
      */
     function refundableEthBalanceOf(address _owner) public constant returns (uint) {
-        return now > crowdsaleEnd && raised < minAmount ? 0 : balances[_owner];
+        return now > crowdsaleEnd && raised < minAmount ? balances[_owner] : 0;
     }
 
 
@@ -342,15 +342,14 @@ contract Crowdsale is ICrowdsale, Owned {
      * @return The index of the current phase
      */
     function getCurrentPhase() public constant returns (uint) {
-        uint phase;
         for (uint i = 0; i < phases.length; i++) {
             if (now <= phases[i].end) {
-                phase = i;
+                return i;
                 break;
             }
         }
 
-        return phase;
+        return phases.length; // Does not exist
     }
 
 
