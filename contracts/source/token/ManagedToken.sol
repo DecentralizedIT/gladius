@@ -110,7 +110,7 @@ contract ManagedToken is IManagedToken, Token, TransferableOwnership {
     function issue(address _to, uint _value) public only_owner safe_arguments(2) returns (bool) {
         
         // Check for overflows
-        require(balances[_to] + _value > balances[_to]);
+        require(balances[_to] + _value >= balances[_to]);
 
         // Create tokens
         balances[_to] += _value;
