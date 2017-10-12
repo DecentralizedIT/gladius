@@ -148,7 +148,7 @@ contract Crowdsale is ICrowdsale, Owned {
      * @param _contributor Address that is being validated
      * @return Wheter the contributor is accepted or not
      */
-    function isAcceptedContributor(address _contributor) internal returns (bool);
+    function isAcceptedContributor(address _contributor) internal constant returns (bool);
 
 
     /**
