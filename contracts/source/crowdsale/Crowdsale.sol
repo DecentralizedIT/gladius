@@ -221,12 +221,12 @@ contract Crowdsale is ICrowdsale, Owned {
     function setupStakeholders(address[] _stakeholders, uint[] _stakeholderEthPercentages, uint[] _stakeholderTokenPercentages, bool[] _stakeholderTokenPayoutOverwriteVestingPeriod, uint[] _stakeholderTokenPayoutFixedVestingPeriod, uint[] _stakeholderTokenPayoutPercentages, uint[] _stakeholderTokenPayoutVestingPeriods) public only_owner at_stage(Stages.Deploying) {
         beneficiary = _stakeholders[0]; // First stakeholder is expected to be the beneficiary
         for (uint i = 0; i < _stakeholders.length; i++) {
+            stakeholderPercentagesIndex.push(_stakeholders[i]);
             stakeholderPercentages[_stakeholders[i]] = Percentage(
                 _stakeholderEthPercentages[i], 
                 _stakeholderTokenPercentages[i], 
                 _stakeholderTokenPayoutOverwriteVestingPeriod[i],
-                _stakeholderTokenPayoutFixedVestingPeriod[i],
-                 stakeholderPercentagesIndex.push(_stakeholders[i]) - 1);
+                _stakeholderTokenPayoutFixedVestingPeriod[i], i);
         }
 
         // Percentages add up to 100

@@ -140,7 +140,7 @@ module.exports = function(deployer, network, accounts) {
       overwriteVestingPeriod: false,
       fixedVestingPeriod: 0
     }, {
-      account: accounts[9], // Wings.ai community
+      account: accounts[1], // Wings.ai community
       tokens: 200,
       eth: 0,
       overwriteVestingPeriod: true,
