@@ -134,10 +134,16 @@ module.exports = function(deployer, network, accounts) {
       overwriteVestingPeriod: false,
       fixedVestingPeriod: 0
     }, {
-      account: accounts[6], // Bounty (+ 2% for Wings community)
+      account: accounts[6], // Bounty
       tokens: 1300,
       eth: 0,
       overwriteVestingPeriod: false,
+      fixedVestingPeriod: 0
+    }, {
+      account: accounts[9], // Wings.ai community
+      tokens: 200,
+      eth: 0,
+      overwriteVestingPeriod: true,
       fixedVestingPeriod: 0
     }]
   } else if(network == "ropsten") {
@@ -167,10 +173,16 @@ module.exports = function(deployer, network, accounts) {
       overwriteVestingPeriod: false,
       fixedVestingPeriod: 0
     }, {
-      account: accounts[6], // Bounty (+ 2% for Wings community)
+      account: accounts[6], // Bounty
       tokens: 1300,
       eth: 0,
       overwriteVestingPeriod: false,
+      fixedVestingPeriod: 0
+    }, {
+      account: accounts[9], // Wings.ai community
+      tokens: 200,
+      eth: 0,
+      overwriteVestingPeriod: true,
       fixedVestingPeriod: 0
     }]
   } else if(network == "main") {
@@ -200,10 +212,16 @@ module.exports = function(deployer, network, accounts) {
       overwriteVestingPeriod: false,
       fixedVestingPeriod: 0
     }, {
-      account: accounts[6], // Bounty (+ 2% for Wings community)
+      account: accounts[6], // Bounty
       tokens: 1300,
       eth: 0,
       overwriteVestingPeriod: false,
+      fixedVestingPeriod: 0
+    }, {
+      account: accounts[9], // Wings.ai community
+      tokens: 200,
+      eth: 0,
+      overwriteVestingPeriod: true,
       fixedVestingPeriod: 0
     }]
   }
