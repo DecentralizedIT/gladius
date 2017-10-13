@@ -535,7 +535,7 @@ contract Crowdsale is ICrowdsale, Owned {
     /**
      * Failsafe and clean-up mechanism
      */
-    function destroy() public only_beneficiary only_after(180 days) {
+    function destroy() public only_beneficiary only_after(2 years) {
         selfdestruct(beneficiary);
     }
 
