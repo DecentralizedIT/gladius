@@ -149,52 +149,13 @@ module.exports = function(deployer, network, accounts) {
   } else if(network == "ropsten") {
     start = new Date("October 15, 2017 12:00:00 GMT+0000").getUnixTime()
     stakeholders = [{
-      account: accounts[0], // Beneficiary 
+      account: '0x38fE864dCB9CB039C7f3d0Adc0a7EfeB9C864cd9', // Beneficiary 
       tokens: 0,
       eth: 8000,
       overwriteReleaseDate: false,
       fixedReleaseDate: 0
     }, {
-      account: accounts[3], // Core founders
-      tokens: 1000,
-      eth: 0,
-      overwriteReleaseDate: true,
-      fixedReleaseDate: new Date("April 15, 2019 12:00:00 GMT+0000").getUnixTime()
-    }, {
-      account: accounts[4], // TLG
-      tokens: 750,
-      eth: 1000,
-      overwriteReleaseDate: false,
-      fixedReleaseDate: 0
-    }, {
-      account: accounts[5], // Inbound
-      tokens: 750,
-      eth: 1000,
-      overwriteReleaseDate: false,
-      fixedReleaseDate: 0
-    }, {
-      account: accounts[6], // Bounty
-      tokens: 1300,
-      eth: 0,
-      overwriteReleaseDate: false,
-      fixedReleaseDate: 0
-    }, {
-      account: accounts[1], // Wings.ai community
-      tokens: 200,
-      eth: 0,
-      overwriteReleaseDate: true,
-      fixedReleaseDate: 0
-    }]
-  } else if(network == "main") {
-    start = new Date("October 15, 2017 12:00:00 GMT+0000").getUnixTime()
-    stakeholders = [{
-      account: accounts[0], // Beneficiary 
-      tokens: 0,
-      eth: 8000,
-      overwriteReleaseDate: false,
-      fixedReleaseDate: 0
-    }, {
-      account: accounts[3], // Core founders
+      account: '0xC19Fd2748a4D5d7906A3Fb731fF6186FE526cC28', // Core founders
       tokens: 1000,
       eth: 0,
       overwriteReleaseDate: true,
@@ -212,7 +173,46 @@ module.exports = function(deployer, network, accounts) {
       overwriteReleaseDate: false,
       fixedReleaseDate: 0
     }, {
-      account: accounts[6], // Bounty
+      account: '0xA88b950589Ac78ec10eDEfb0b40563400f3aF13E', // Bounty
+      tokens: 1300,
+      eth: 0,
+      overwriteReleaseDate: false,
+      fixedReleaseDate: 0
+    }, {
+      account: '0x5462b7a6d06182E5e0Db22552Dd48b29eDa5BAF3', // Wings.ai community
+      tokens: 200,
+      eth: 0,
+      overwriteReleaseDate: true,
+      fixedReleaseDate: 0
+    }]
+  } else if(network == "main") {
+    start = new Date("October 15, 2017 12:00:00 GMT+0000").getUnixTime()
+    stakeholders = [{
+      account: '0x38fE864dCB9CB039C7f3d0Adc0a7EfeB9C864cd9', // Beneficiary 
+      tokens: 0,
+      eth: 8000,
+      overwriteReleaseDate: false,
+      fixedReleaseDate: 0
+    }, {
+      account: '0xC19Fd2748a4D5d7906A3Fb731fF6186FE526cC28', // Core founders
+      tokens: 1000,
+      eth: 0,
+      overwriteReleaseDate: true,
+      fixedReleaseDate: new Date("April 15, 2019 12:00:00 GMT+0000").getUnixTime()
+    }, {
+      account: '0x197f48540296B76caBe1B7C27f35767338084E03', // TLG
+      tokens: 750,
+      eth: 1000,
+      overwriteReleaseDate: false,
+      fixedReleaseDate: 0
+    }, {
+      account: '0x201f2129BF943Ff4b0042ec05F123F6C8C52637C', // Inbound
+      tokens: 750,
+      eth: 1000,
+      overwriteReleaseDate: false,
+      fixedReleaseDate: 0
+    }, {
+      account: '0xA88b950589Ac78ec10eDEfb0b40563400f3aF13E', // Bounty
       tokens: 1300,
       eth: 0,
       overwriteReleaseDate: false,
