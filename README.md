@@ -1,4 +1,3 @@
-# Gladius.io
 # Welcome to the Gladius crowdsale and token repository
 
 Gladius is the decentralized solution to protect against DDoS attacks by allowing you to connect 
@@ -43,3 +42,5 @@ Style](https://standardjs.com/) is used. There are several
 [plugins](https://standardjs.com/#are-there-text-editor-plugins) available for
 widely-used editors. These also support automatic fixing. This linter is run
 automatically by Continuous Integration.
+
+* Crowdsale and token developed by Frank Bonnet 
