@@ -43,4 +43,4 @@ Style](https://standardjs.com/) is used. There are several
 widely-used editors. These also support automatic fixing. This linter is run
 automatically by Continuous Integration.
 
-* Crowdsale and token developed by Frank Bonnet 
+Crowdsale and token developed by Frank Bonnet 
