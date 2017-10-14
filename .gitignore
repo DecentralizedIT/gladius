@@ -2,6 +2,7 @@
 /BuildProcessTemplates
 /ps
 /test
+/migrations
 /node_modules
 npm-debug.log
 /coverage
