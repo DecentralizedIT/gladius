@@ -90,7 +90,7 @@ contract ManagedToken is IManagedToken, Token, TransferableOwnership {
 
 
     /**
-     * Unlocks the token so that the transfering of value is enabled 
+     * Unlocks the token so that the transferring of value is enabled 
      *
      * @return Whether the unlocking was successful or not
      */

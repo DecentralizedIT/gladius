@@ -14,7 +14,7 @@ contract IWingsAdapter {
     /**
      * Get the total raised amount of Ether
      *
-     * Can only increased, means if you withdraw ETH from the wallet, should be not modified (you can use two fields 
+     * Can only increase, meaning if you withdraw ETH from the wallet, it should be not modified (you can use two fields 
      * to keep one with a total accumulated amount) amount of ETH in contract and totalCollected for total amount of ETH collected
      *
      * @return Total raised Ether amount

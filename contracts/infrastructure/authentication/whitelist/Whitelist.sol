@@ -24,10 +24,10 @@ contract Whitelist is IWhitelist, TransferableOwnership {
 
 
     /**
-     * Returns wheter an entry exists for `_account`
+     * Returns whether an entry exists for `_account`
      *
      * @param _account The account to check
-     * @return wheter `_account` is has an entry in the whitelist
+     * @return whether `_account` is has an entry in the whitelist
      */
     function hasEntry(address _account) public constant returns (bool) {
         return listIndex.length > 0 && _account == listIndex[list[_account].index];
@@ -59,7 +59,7 @@ contract Whitelist is IWhitelist, TransferableOwnership {
     /**
      * Remove `_account` from the whitelist
      *
-     * Will not acctually remove the entry but disable it by updating
+     * Will not actually remove the entry but disable it by updating
      * the accepted record
      *
      * @param _account The account to remove
@@ -76,10 +76,10 @@ contract Whitelist is IWhitelist, TransferableOwnership {
     /**
      * Authenticate 
      *
-     * Returns wheter `_account` is on the whitelist
+     * Returns whether `_account` is on the whitelist
      *
      * @param _account The account to authenticate
-     * @return wheter `_account` is successfully authenticated
+     * @return whether `_account` is successfully authenticated
      */
     function authenticate(address _account) public constant returns (bool) {
         return list[_account].accepted;

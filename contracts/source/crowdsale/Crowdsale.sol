@@ -659,7 +659,7 @@ contract Crowdsale is ICrowdsale, Owned {
     /**
      * Allocate Tokens
      *
-     * @param _beneficiary The account to alocate the tokens for
+     * @param _beneficiary The account to allocate the tokens for
      * @param _amount The amount of tokens to allocate
      * @param _releaseDate The date after which the tokens can be withdrawn
      */    

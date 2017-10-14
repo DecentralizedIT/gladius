@@ -14,10 +14,10 @@ contract IWhitelist {
     /**
      * Authenticate 
      *
-     * Returns wheter `_account` is on the whitelist
+     * Returns whether `_account` is on the whitelist
      *
      * @param _account The account to authenticate
-     * @return wheter `_account` is successfully authenticated
+     * @return whether `_account` is successfully authenticated
      */
     function authenticate(address _account) constant returns (bool);
 }

@@ -8,8 +8,8 @@ import "../integration/wings/IWingsAdapter.sol";
 /**
  * @title GLACrowdsale
  *
- * Gladius is the decentralized solution to protecting against DDoS attacks by allowing you to connect 
- * to protection pools near you to provide better protection and accelerate your content. With an easy 
+ * Gladius is the decentralized solution to protect against DDoS attacks by allowing you to connect 
+ * with protection pools near you to provide better protection and accelerate your content. With an easy 
  * to use interface as well as powerful insight tools, Gladius enables anyone to protect and accelerate 
  * their website. Visit https://gladius.io/ 
  *
@@ -31,7 +31,7 @@ contract GLACrowdsale is Crowdsale, ITokenRetreiver, IWingsAdapter {
      * @param _start The timestamp of the start date
      * @param _token The token that is sold
      * @param _tokenDenominator The token amount of decimals that the token uses
-     * @param _percentageDenominator The percision of percentages
+     * @param _percentageDenominator The precision of percentages
      * @param _minAmount The min cap for the ICO
      * @param _maxAmount The max cap for the ICO
      * @param _minAcceptedAmount The lowest accepted amount during the ICO phase

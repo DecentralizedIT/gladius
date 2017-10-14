@@ -91,20 +91,17 @@ module.exports = function(deployer, network, accounts) {
   }]
 
   var stakeholderTokenReleasePhases = [{
-    percentage: 2000,
-    vestingPeriod: 30 * time.days
-  }, {
-    percentage: 2000,
-    vestingPeriod: 60 * time.days
-  }, {
-    percentage: 2000,
+    percentage: 2500,
     vestingPeriod: 90 * time.days
   }, {
-    percentage: 2000,
-    vestingPeriod: 120 * time.days
+    percentage: 2500,
+    vestingPeriod: 180 * time.days
   }, {
-    percentage: 2000,
-    vestingPeriod: 150 * time.days
+    percentage: 2500,
+    vestingPeriod: 270 * time.days
+  }, {
+    percentage: 2500,
+    vestingPeriod: 360 * time.days
   }]
 
   if (network == "test" || network == "develop" || network == "development") {

@@ -3,7 +3,7 @@ pragma solidity ^0.4.15;
 /**
  * @title ICrowdsale
  *
- * Base crowdsale interface to manages the sale of 
+ * Base crowdsale interface to manage the sale of 
  * an ERC20 token
  *
  * #created 29/09/2017
@@ -61,7 +61,7 @@ contract ICrowdsale {
      * Returns the rate and bonus release date
      *
      * @param _phase The phase to use while determining the rate
-     * @param _volume The amount wei used to determin what volume multiplier to use
+     * @param _volume The amount wei used to determine what volume multiplier to use
      * @return The rate used in `_phase` multiplied by the corresponding volume multiplier
      */
     function getRate(uint _phase, uint _volume) constant returns (uint);

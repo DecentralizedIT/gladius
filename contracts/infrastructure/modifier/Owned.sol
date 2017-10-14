@@ -7,7 +7,7 @@ contract Owned {
 
 
     /**
-     * The publiser is the inital owner
+     * The publisher is the inital owner
      */
     function Owned() {
         owner = msg.sender;
