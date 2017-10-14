@@ -39,25 +39,25 @@ module.exports = function(deployer, network, accounts) {
   }, {
     period: 'First 24 hours',
     duration: 1 * time.days,
-    rate: 750,
+    rate: 600,
     lockupPeriod: 0,
     usesVolumeMultiplier: false
   }, {
     period: 'First week',
     duration: 7 * time.days,
-    rate: 650,
+    rate: 525,
     lockupPeriod: 0,
     usesVolumeMultiplier: false
   }, {
     period: 'Second week',
     duration: 7 * time.days,
-    rate: 575,
+    rate: 515,
     lockupPeriod: 0,
     usesVolumeMultiplier: false
   }, {
     period: 'Third week',
     duration: 7 * time.days,
-    rate: 525,
+    rate: 505,
     lockupPeriod: 0,
     usesVolumeMultiplier: false
   }, {
