@@ -45,4 +45,4 @@ automatically by Continuous Integration.
 
 ## Development
 
-Crowdsale and token developed by [Frank Bonnet](https://www.linkedin.com/in/frank-bonnet-3b890865/) and reviewd by [Hosho]() and [SmartDec]()
+Crowdsale and token developed by [Frank Bonnet](https://www.linkedin.com/in/frank-bonnet-3b890865/) and reviewd by [Hosho](https://github.com/DecentralizedIT/gladius/blob/master/docs/reviews/Hosho.pdf) and [SmartDec](https://github.com/DecentralizedIT/gladius/blob/master/docs/reviews/SmartDec.pdf)
