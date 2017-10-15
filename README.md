@@ -43,4 +43,6 @@ Style](https://standardjs.com/) is used. There are several
 widely-used editors. These also support automatic fixing. This linter is run
 automatically by Continuous Integration.
 
-Crowdsale and token developed by Frank Bonnet 
+## Development
+
+Crowdsale and token developed by [Frank Bonnet](https://www.linkedin.com/in/frank-bonnet-3b890865/) and reviewd by [Hosho]() and [SmartDec]()
