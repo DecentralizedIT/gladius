@@ -341,7 +341,7 @@ contract Crowdsale is ICrowdsale, Owned {
      *
      * @return The index of the current phase
      */
-    function getCurrentPhase() public constant returns (uint found) {
+    function getCurrentPhase() public constant returns (uint) {
         for (uint i = 0; i < phases.length; i++) {
             if (now <= phases[i].end) {
                 return i;
